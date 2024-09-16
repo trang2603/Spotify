@@ -2,10 +2,16 @@ package com.demo.screen.artist
 
 import com.demo.base.BaseMVVMViewModel
 import com.demo.data.model.Artist
+import com.demo.data.model.Artists
 import com.demo.data.model.Songs
+import com.demo.data.repository.artist.ArtistRepository
+import com.demo.data.repository.auth.AuthRepository
+import com.demo.data.repository.auth.IAuthRepository
 
-class ArtistViewModel :
-    BaseMVVMViewModel<ArtistViewModel.State, ArtistViewModel.Action, ArtistViewModel.Mutation, ArtistViewModel.Effect>() {
+class ArtistViewModel(
+    private val authRepository: IAuthRepository,
+    private val artistRepository: ArtistRepository,
+) : BaseMVVMViewModel<ArtistViewModel.State, ArtistViewModel.Action, ArtistViewModel.Mutation, ArtistViewModel.Effect>() {
     override var initialState: State = State()
 
     override fun handleAction(
@@ -13,11 +19,34 @@ class ArtistViewModel :
         action: Action,
     ) {
         when (action) {
-            is Action.GetList -> {
-                val newList = initData()
-                sendMutation(Mutation.GetList(newList))
+            is Action.GetArtists -> {
+                fetchArtists(action.artistIds)
             }
         }
+    }
+
+    private fun fetchArtists(artistIds: List<String>) {
+        val clientId = "1512f433381a498887e433ae9740d500"
+        val clientSecret = "a9aa9a3e39d54cd6a8871ff5d5c5a474"
+        if (authRepository is AuthRepository) {
+            authRepository.getAccessToken(
+                clientId = clientId,
+                clientSecret = clientSecret,
+                grantType = "client_credentials",
+                onSuccess = { accessToken ->
+                    fetchArtistsWithToken(accessToken, artistIds)
+                },
+            )
+        }
+    }
+
+    private fun fetchArtistsWithToken(
+        accessToken: String,
+        artistIds: List<String>,
+    ) {
+        artistRepository.getArtists(accessToken = accessToken, artistIds = artistIds, onSuccess = { artists ->
+            sendMutation(Mutation.GetList(artists))
+        })
     }
 
     override fun handleMutation(
@@ -36,17 +65,19 @@ class ArtistViewModel :
         }
 
     sealed class Action : BaseMVVMViewModel.MVVMAction {
-        data object GetList : Action()
+        data class GetArtists(
+            val artistIds: List<String>,
+        ) : Action()
     }
 
     sealed class Mutation : BaseMVVMViewModel.MVVMMutation {
         data class GetList(
-            val data: List<Artist>,
+            val data: List<Artists>,
         ) : Mutation()
     }
 
     data class State(
-        val data: List<Artist>? = null,
+        val data: List<Artists>? = null,
     ) : BaseMVVMViewModel.MVVMState
 
     sealed class Effect : BaseMVVMViewModel.MVVMEffect

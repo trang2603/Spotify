@@ -8,6 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.R
 import com.demo.base.BaseMVVMFragment
+import com.demo.data.repository.AuthRetrofitClient
+import com.demo.data.repository.RetrofitClient
+import com.demo.data.repository.artist.ArtistRepository
+import com.demo.data.repository.auth.AuthRepository
 import com.demo.databinding.FragmentArtistBinding
 import com.demo.screen.artist.adapter.ArtistAdapter
 import com.demo.screen.songs.SongsFragment
@@ -29,7 +33,7 @@ class ArtistFragment : BaseMVVMFragment<ArtistViewModel>() {
                 commit()
             }
         })
-    private val viewModel: ArtistViewModel = ArtistViewModel()
+    private lateinit var viewModel: ArtistViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +41,9 @@ class ArtistFragment : BaseMVVMFragment<ArtistViewModel>() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentArtistBinding.inflate(inflater, container, false)
+        val authRepository = AuthRepository(AuthRetrofitClient)
+        val artistRepository = ArtistRepository(RetrofitClient)
+        viewModel = ArtistViewModel(authRepository, artistRepository)
         return binding.root
     }
 
@@ -47,7 +54,8 @@ class ArtistFragment : BaseMVVMFragment<ArtistViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         binding.recycleView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recycleView.adapter = adapter
-        viewModel.sendAction(ArtistViewModel.Action.GetList)
+        val artistIds = listOf("2CIMQHirSU0MQqyYHq0eOx", "57dN52uHvrHOxijzpIgu3E", "1vCWHaC5f2uS3yhpwWbIA6")
+        viewModel.sendAction(ArtistViewModel.Action.GetArtists(artistIds))
     }
 
     override fun observerState() {

@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
+    implementation(libs.fragment.ktx)
     implementation(libs.scribejava.apis)
     implementation(files("../spotify-app-remote-release-0.8.0.aar"))
     testImplementation(libs.junit)

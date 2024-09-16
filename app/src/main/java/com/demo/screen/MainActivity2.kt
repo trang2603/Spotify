@@ -11,15 +11,8 @@ import com.demo.screen.home.HomeFragment
 import com.demo.screen.music.MusicFragment
 import com.demo.screen.setting.SettingFragment
 import com.google.android.material.tabs.TabLayoutMediator
-import com.spotify.android.appremote.api.ConnectionParams;
-import com.spotify.android.appremote.api.Connector;
-import com.spotify.android.appremote.api.SpotifyAppRemote;
-
-import com.spotify.protocol.client.Subscription;
-import com.spotify.protocol.types.PlayerState;
-import com.spotify.protocol.types.Track;
-
-
+import com.spotify.android.appremote.api.SpotifyAppRemote
+import com.spotify.protocol.types.Track
 
 class MainActivity2 : AppCompatActivity() {
     private val clientId = "1512f433381a498887e433ae9740d500"
@@ -46,7 +39,7 @@ class MainActivity2 : AppCompatActivity() {
         setupTabLayout()
     }
 
-    override fun onStart() {
+    /*override fun onStart() {
         super.onStart()
         val connectionParams = ConnectionParams.Builder(clientId)
             .setRedirectUri(redirectUri)
@@ -66,7 +59,7 @@ class MainActivity2 : AppCompatActivity() {
                 // Something went wrong when attempting to connect! Handle errors here
             }
         })
-    }
+    }*/
     private fun connected() {
         spotifyAppRemote?.let {
             // Play a playlist
@@ -78,45 +71,39 @@ class MainActivity2 : AppCompatActivity() {
                 Log.d("MainActivity", track.name + " by " + track.artist.name)
             }
         }
-
     }
+
     override fun onStop() {
         super.onStop()
         spotifyAppRemote?.let {
             SpotifyAppRemote.disconnect(it)
         }
-
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         event ?: return false
-        when(event?.action) {
+        when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 eventDown = System.currentTimeMillis()
             }
             MotionEvent.ACTION_UP -> {
                 val eventUp = System.currentTimeMillis()
                 val distanceTime = eventUp - eventDown
-                if(distanceTime < longClick) {
+                if (distanceTime < longClick) {
                     onClick()
-                }
-                else {
+                } else {
                     onLongClick()
                 }
             }
         }
         return true
-
     }
 
     private fun onLongClick() {
-
     }
 
     private fun onClick() {
-        
     }
-
 
     private fun setupTabLayout() {
         TabLayoutMediator(binding.tablayout, binding.viewPager) { tab, position ->

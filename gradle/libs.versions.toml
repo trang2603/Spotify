@@ -18,6 +18,7 @@ converter-gson = "2.9.0"
 okhttp = "4.9.0"
 scribejava-apis = "8.3.1"
 play-services-auth = "20.5.0"
+fragment-ktx = "1.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +37,7 @@ retrofit = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "
 converter-gson = {group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converter-gson"}
 okhttp = {group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp"}
 scribejava-apis = {group = "com.github.scribejava", name = "scribejava-apis", version.ref = "scribejava-apis"}
+fragment-ktx = {group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment-ktx"}
 play-services-auth = {group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth"}
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

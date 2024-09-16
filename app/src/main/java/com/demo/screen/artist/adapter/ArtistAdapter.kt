@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.demo.data.model.Artist
+import com.demo.data.model.Artists
 import com.demo.databinding.ItemArtistBinding
 
 class ArtistAdapter(
-    val onArtistClick: (Artist) -> Unit,
-) : ListAdapter<Artist, ArtistViewHolder>(ArtistDiffCalback()) {
+    val onArtistClick: (Artists) -> Unit,
+) : ListAdapter<Artists, ArtistViewHolder>(ArtistDiffCalback()) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -30,14 +30,14 @@ class ArtistAdapter(
     }
 }
 
-class ArtistDiffCalback : DiffUtil.ItemCallback<Artist>() {
+class ArtistDiffCalback : DiffUtil.ItemCallback<Artists>() {
     override fun areItemsTheSame(
-        oldItem: Artist,
-        newItem: Artist,
+        oldItem: Artists,
+        newItem: Artists,
     ): Boolean = oldItem.id == newItem.id
 
     override fun areContentsTheSame(
-        oldItem: Artist,
-        newItem: Artist,
+        oldItem: Artists,
+        newItem: Artists,
     ): Boolean = areItemsTheSame(oldItem, newItem)
 }
