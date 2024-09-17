@@ -1,6 +1,6 @@
 package com.demo.data.repository.auth
 
-interface IAuthRepository {
+interface IAuth {
     fun getAccessToken(
         clientId: String,
         clientSecret: String,

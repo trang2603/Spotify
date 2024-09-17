@@ -4,8 +4,15 @@ import android.content.ContentResolver
 import android.net.Uri
 import com.demo.base.BaseMVVMViewModel
 import com.demo.data.model.Songs
+import com.demo.data.model.Track
+import com.demo.data.repository.album.IAlbum
+import com.demo.data.repository.auth.IAuth
 
-class SongsViewModel : BaseMVVMViewModel<SongsViewModel.State, SongsViewModel.Action, SongsViewModel.Mutation, SongsViewModel.Effect>() {
+class SongsViewModel(
+    private val authRepository: IAuth,
+    private val albumRepository: IAlbum,
+//    private val artistRepository: IArtist,
+) : BaseMVVMViewModel<SongsViewModel.State, SongsViewModel.Action, SongsViewModel.Mutation, SongsViewModel.Effect>() {
     override var initialState: State = State()
     private var contentResolver: ContentResolver? = null
 
@@ -19,11 +26,12 @@ class SongsViewModel : BaseMVVMViewModel<SongsViewModel.State, SongsViewModel.Ac
     ) {
         when (action) {
             is Action.GetList -> {
-                val newList = initData()
-                sendMutation(Mutation.GetList(newList))
+                /*val newList = initData()
+                sendMutation(Mutation.GetList(newList))*/
+                fetchSongs(action.albumId)
             }
 
-            is Action.UpdateIconPlayPause -> {
+            /*is Action.UpdateIconPlayPause -> {
                 val updateList = updateIconPlayPause(action.songs)
                 sendMutation(Mutation.GetList(updateList))
             }
@@ -31,8 +39,39 @@ class SongsViewModel : BaseMVVMViewModel<SongsViewModel.State, SongsViewModel.Ac
             is Action.UpdateIconHeart -> {
                 val updateList = updateIconHeart(action.songs)
                 sendMutation(Mutation.GetList(updateList))
-            }
+            }*/
         }
+    }
+
+    private fun fetchSongs(
+        albumId: String,
+//        artistId: String,
+    ) {
+        val clientId = "1512f433381a498887e433ae9740d500"
+        val clientSecret = "a9aa9a3e39d54cd6a8871ff5d5c5a474"
+        authRepository.getAccessToken(
+            clientSecret = clientSecret,
+            clientId = clientId,
+            grantType = "client_credentials",
+            onSuccess = { accessToken ->
+                fetchSongsForAlbumAndArtist(accessToken, albumId)
+            },
+        )
+    }
+
+    private fun fetchSongsForAlbumAndArtist(
+        accessToken: String,
+        albumId: String,
+//        artistId: String,
+    ) {
+        albumRepository.getAlbumTracks(
+            accessToken = accessToken,
+            id = albumId,
+            onSuccess = { tracks ->
+                sendMutation(Mutation.GetList(tracks))
+//                fetchSongsWithArtist(accessToken, artistId, songList)
+            },
+        )
     }
 
     override fun handleMutation(
@@ -73,7 +112,7 @@ class SongsViewModel : BaseMVVMViewModel<SongsViewModel.State, SongsViewModel.Ac
         return songList
     }
 
-    private fun updateIconPlayPause(songs: Songs?): List<Songs> {
+    /*private fun updateIconPlayPause(songs: Songs?): List<Songs> {
         val list = state.value.data
         return list.map {
             it.copy(
@@ -99,28 +138,31 @@ class SongsViewModel : BaseMVVMViewModel<SongsViewModel.State, SongsViewModel.Ac
                     },
             )
         }
-    }
+    }*/
 
     sealed class Action : BaseMVVMViewModel.MVVMAction {
-        data object GetList : Action()
+        data class GetList(
+            val albumId: String,
+//            val artistId: String,
+        ) : Action()
 
-        data class UpdateIconPlayPause(
+        /*data class UpdateIconPlayPause(
             val songs: Songs?,
         ) : Action()
 
         data class UpdateIconHeart(
             val songs: Songs?,
-        ) : Action()
+        ) : Action()*/
     }
 
     sealed class Mutation : BaseMVVMViewModel.MVVMMutation {
         data class GetList(
-            val data: List<Songs>,
+            val data: List<Track>,
         ) : Mutation()
     }
 
     data class State(
-        val data: List<Songs> = emptyList(),
+        val data: List<Track> = emptyList(),
     ) : BaseMVVMViewModel.MVVMState
 
     sealed class Effect : BaseMVVMViewModel.MVVMEffect

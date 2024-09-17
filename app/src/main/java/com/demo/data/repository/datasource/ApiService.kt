@@ -1,10 +1,10 @@
 package com.demo.data.repository.datasource
 
-import com.demo.data.model.Playlist
-import com.demo.data.model.Playlists
-import com.demo.data.repository.AccessArtists
-import com.demo.data.repository.AccessPlaylist
-import com.demo.data.repository.AccessTokenResponse
+import com.demo.data.repository.album.AccessAlbums
+import com.demo.data.repository.artist.AccessArtists
+import com.demo.data.repository.auth.AccessTokenResponse
+import com.demo.data.repository.playlist.AccessPlaylist
+import com.demo.data.repository.track.AccessTracks
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -12,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -35,4 +36,30 @@ interface ApiService {
         @Header("Authorization") accessToken: String,
         @Query("playlist_id") id: String,
     ): Call<AccessPlaylist>
+
+    @GET("tracks")
+    fun getTracks(
+        @Header("Authorization") accessToken: String,
+        @Query("ids") ids: String,
+        @Query("market") market: String,
+    ): Call<AccessTracks>
+
+    @GET("albums")
+    fun getSeveralAlbums(
+        @Header("Authorization") accessToken: String,
+        @Query("ids") ids: String,
+        @Query("market") market: String,
+    ): Call<AccessAlbums>
+
+    @GET("albums/{id}/tracks")
+    fun getAlbumTracks(
+        @Header("Authorization") accessToken: String,
+        @Path("id") id: String,
+    ): Call<AccessTracks>
+
+    @GET("artists/{id}/albums")
+    fun getArtistOfAlbums(
+        @Header("Authorization") accessToken: String,
+        @Query("id") id: String,
+    ): Call<AccessAlbums>
 }

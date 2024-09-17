@@ -8,7 +8,6 @@ import com.demo.base.BaseMVVMFragment
 import com.demo.data.model.Songs
 import com.demo.databinding.FragmentMinibarBinding
 import com.demo.screen.minibar.adapter.MiniBarAdapter
-import com.demo.screen.songs.SongsViewModel
 import kotlin.collections.ArrayList
 
 class MiniBarFragment : BaseMVVMFragment<MiniBarViewModel>() {
@@ -16,7 +15,7 @@ class MiniBarFragment : BaseMVVMFragment<MiniBarViewModel>() {
     private lateinit var adapter: MiniBarAdapter
     private var currentSongPosition: Int = 0
     private var songsList: List<Songs> = listOf()
-    private var viewModel: SongsViewModel = SongsViewModel()
+//    private var viewModel: SongsViewModel = SongsViewModel()
 
     companion object {
         fun newInstance(

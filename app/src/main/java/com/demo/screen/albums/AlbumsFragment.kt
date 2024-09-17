@@ -8,6 +8,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.demo.R
 import com.demo.base.BaseMVVMFragment
+import com.demo.data.repository.AuthRetrofitClient
+import com.demo.data.repository.RetrofitClient
+import com.demo.data.repository.album.AlbumRepository
+import com.demo.data.repository.auth.AuthRepository
 import com.demo.databinding.FragmentAlbumBinding
 import com.demo.screen.albums.adapter.AlbumsAdapter
 import com.demo.screen.songs.SongsFragment
@@ -27,7 +31,9 @@ class AlbumsFragment : BaseMVVMFragment<AlbumsViewModel>() {
                 commit()
             }
         })
-    private val viewModel: AlbumsViewModel = AlbumsViewModel()
+    private val authRepository = AuthRepository(AuthRetrofitClient)
+    private val albumsRepository = AlbumRepository(RetrofitClient)
+    private val viewModel: AlbumsViewModel = AlbumsViewModel(authRepository, albumsRepository)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +51,9 @@ class AlbumsFragment : BaseMVVMFragment<AlbumsViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvAlbum.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvAlbum.adapter = adapter
-        viewModel.sendAction(AlbumsViewModel.Action.GetList)
+        val albums = listOf("382ObEPsp2rxGrnsizN5TX", "1A2GTWGtFfWp7KSQTwWOyo", "2noRn2Aes5aoNVsU6iWThc")
+        val market = "ES"
+        viewModel.sendAction(AlbumsViewModel.Action.GetList(albums, market))
     }
 
     override fun observerState() {

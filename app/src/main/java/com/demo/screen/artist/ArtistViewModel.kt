@@ -4,12 +4,12 @@ import com.demo.base.BaseMVVMViewModel
 import com.demo.data.model.Artist
 import com.demo.data.model.Artists
 import com.demo.data.model.Songs
-import com.demo.data.repository.artist.IArtistRepository
-import com.demo.data.repository.auth.IAuthRepository
+import com.demo.data.repository.artist.IArtist
+import com.demo.data.repository.auth.IAuth
 
 class ArtistViewModel(
-    private val authRepository: IAuthRepository,
-    private val artistRepository: IArtistRepository,
+    private val authRepository: IAuth,
+    private val artistRepository: IArtist,
 ) : BaseMVVMViewModel<ArtistViewModel.State, ArtistViewModel.Action, ArtistViewModel.Mutation, ArtistViewModel.Effect>() {
     override var initialState: State = State()
 
@@ -27,26 +27,27 @@ class ArtistViewModel(
     private fun fetchArtists(artistIds: List<String>) {
         val clientId = "1512f433381a498887e433ae9740d500"
         val clientSecret = "a9aa9a3e39d54cd6a8871ff5d5c5a474"
-            authRepository.getAccessToken(
-                clientId = clientId,
-                clientSecret = clientSecret,
-                grantType = "client_credentials",
-                onSuccess = { accessToken ->
-                    fetchArtistsWithToken(accessToken, artistIds)
-                },
-            )
+        authRepository.getAccessToken(
+            clientId = clientId,
+            clientSecret = clientSecret,
+            grantType = "client_credentials",
+            onSuccess = { accessToken ->
+                fetchArtistsWithToken(accessToken, artistIds)
+            },
+        )
     }
 
     private fun fetchArtistsWithToken(
         accessToken: String,
         artistIds: List<String>,
     ) {
-            artistRepository.getArtists(
-                accessToken = accessToken,
-                artistIds = artistIds,
-                onSuccess = { artists ->
-                    sendMutation(Mutation.GetList(artists))
-                })
+        artistRepository.getArtists(
+            accessToken = accessToken,
+            artistIds = artistIds,
+            onSuccess = { artists ->
+                sendMutation(Mutation.GetList(artists))
+            },
+        )
     }
 
     override fun handleMutation(

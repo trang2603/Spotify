@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.demo.data.model.Songs
+import com.demo.data.model.Track
 import com.demo.databinding.ItemSongsBinding
 
 class SongsAdapter(
     val onItemLongClick: (Int, View) -> Unit,
     // communicate with fragment
-    val onItemPlayPauseClick: (Songs?) -> Unit,
-    val onItemHeartClick: (Songs?) -> Unit,
-) : ListAdapter<Songs, SongsViewHolder>(MusicDiffUtil()) {
+    val onItemPlayPauseClick: (Track?) -> Unit,
+    val onItemHeartClick: (Track?) -> Unit,
+) : ListAdapter<Track, SongsViewHolder>(MusicDiffUtil()) {
     companion object {
         val UPDATE_STATUS_AUDIO = "UPDATE_STATUS_AUDIO"
         val UPDATE_STATUS_FAVOURITE = "UPDATE_STATUS_FAVOURITE"
@@ -57,20 +57,20 @@ class SongsAdapter(
     }
 }
 
-class MusicDiffUtil : DiffUtil.ItemCallback<Songs>() {
+class MusicDiffUtil : DiffUtil.ItemCallback<Track>() {
     override fun areItemsTheSame(
-        oldItem: Songs,
-        newItem: Songs,
+        oldItem: Track,
+        newItem: Track,
     ): Boolean = oldItem.id == newItem.id
 
     override fun areContentsTheSame(
-        oldItem: Songs,
-        newItem: Songs,
-    ): Boolean =
-        oldItem.isPlaying == newItem.isPlaying &&
-            oldItem.isFavourite == newItem.isFavourite
+        oldItem: Track,
+        newItem: Track,
+    ): Boolean = areItemsTheSame(oldItem, newItem)
+        /*oldItem.isPlaying == newItem.isPlaying &&
+            oldItem.isFavourite == newItem.isFavourite*/
 
-    override fun getChangePayload(
+    /*override fun getChangePayload(
         oldItem: Songs,
         newItem: Songs,
     ): Any? =
@@ -80,5 +80,5 @@ class MusicDiffUtil : DiffUtil.ItemCallback<Songs>() {
             SongsAdapter.UPDATE_STATUS_FAVOURITE
         } else {
             SongsAdapter.UPDATE_DATA
-        }
+        }*/
 }

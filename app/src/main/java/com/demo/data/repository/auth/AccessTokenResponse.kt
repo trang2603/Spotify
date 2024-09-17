@@ -1,4 +1,4 @@
-package com.demo.data.repository
+package com.demo.data.repository.auth
 
 data class AccessTokenResponse(
     val access_token: String,

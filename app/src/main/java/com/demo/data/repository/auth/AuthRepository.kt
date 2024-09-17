@@ -1,6 +1,5 @@
 package com.demo.data.repository.auth
 
-import com.demo.data.repository.AccessTokenResponse
 import com.demo.data.repository.AuthRetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -8,7 +7,7 @@ import retrofit2.Response
 
 class AuthRepository(
     private val authRetrofitClient: AuthRetrofitClient,
-) : IAuthRepository {
+) : IAuth {
     override fun getAccessToken(
         clientId: String,
         clientSecret: String,

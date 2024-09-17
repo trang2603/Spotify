@@ -14,7 +14,7 @@ data class Playlists(
     val snapshot_id: String,
     val tracks: Tracks,
     val type: String,
-    val uri: String
+    val uri: String,
 )
 
 data class Owner(
@@ -24,7 +24,7 @@ data class Owner(
     val id: String,
     val type: String,
     val uri: String,
-    val display_name: String
+    val display_name: String,
 )
 
 data class Tracks(
@@ -34,14 +34,14 @@ data class Tracks(
     val offset: Int,
     val previous: String?,
     val total: Int,
-    val items: List<TrackItem>
+    val items: List<TrackItem>,
 )
 
 data class TrackItem(
     val added_at: String,
     val added_by: AddedBy,
     val is_local: Boolean,
-    val track: Track
+    val track: Track,
 )
 
 data class AddedBy(
@@ -49,12 +49,12 @@ data class AddedBy(
     val href: String,
     val id: String,
     val type: String,
-    val uri: String
+    val uri: String,
 )
 
 data class Track(
     val album: Album,
-    val artists: List<Artist>,
+    val artists: List<Artists>,
     val available_markets: List<String>,
     val disc_number: Int,
     val duration_ms: Int,
@@ -70,7 +70,7 @@ data class Track(
     val track_number: Int,
     val type: String,
     val uri: String,
-    val is_local: Boolean
+    val is_local: Boolean,
 )
 
 data class Album(
@@ -87,16 +87,15 @@ data class Album(
     val restrictions: Restrictions?,
     val type: String,
     val uri: String,
-    val artists: List<Artist>
+    val artists: List<Artists>,
 )
-
 
 data class ExternalIds(
     val isrc: String?,
     val ean: String?,
-    val upc: String?
+    val upc: String?,
 )
 
 data class Restrictions(
-    val reason: String
+    val reason: String,
 )

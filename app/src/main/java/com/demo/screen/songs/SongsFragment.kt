@@ -10,10 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.R
 import com.demo.base.BaseMVVMFragment
+import com.demo.data.repository.AuthRetrofitClient
+import com.demo.data.repository.RetrofitClient
+import com.demo.data.repository.album.AlbumRepository
+import com.demo.data.repository.auth.AuthRepository
 import com.demo.databinding.FragmentSongsBinding
 import com.demo.databinding.LayoutPopupBinding
-import com.demo.screen.dialogaddplaylist.DialogAddPlaylistFragment
-import com.demo.screen.minibar.MiniBarFragment
 import com.demo.screen.songs.adapter.SongsAdapter
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -27,14 +29,17 @@ class SongsFragment : BaseMVVMFragment<SongsViewModel>() {
             setupPopup(position, viewClick)
         }, onItemPlayPauseClick = { song ->
             // TODO: update playpause of music -> update list
-            viewModelSongs.sendAction(SongsViewModel.Action.UpdateIconPlayPause(song))
-            showMiniBar(song?.id!!)
+//            viewModelSongs.sendAction(SongsViewModel.Action.UpdateIconPlayPause(song))
+//            showMiniBar(song?.id!!)
         }, onItemHeartClick = { song ->
             // TODO: update isFavourite of music -> update list
-            viewModelSongs.sendAction(SongsViewModel.Action.UpdateIconHeart(song))
+//            viewModelSongs.sendAction(SongsViewModel.Action.UpdateIconHeart(song))
         })
 
-    private val viewModelSongs: SongsViewModel = SongsViewModel()
+    private val authRepository = AuthRepository(AuthRetrofitClient)
+    private val albumRepository = AlbumRepository(RetrofitClient)
+
+    private val viewModelSongs: SongsViewModel = SongsViewModel(authRepository, albumRepository)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +49,6 @@ class SongsFragment : BaseMVVMFragment<SongsViewModel>() {
         binding = FragmentSongsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(
@@ -56,10 +60,11 @@ class SongsFragment : BaseMVVMFragment<SongsViewModel>() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.recycleView.adapter = adapter
         viewModelSongs.setContentResolver(context?.contentResolver!!)
-        viewModelSongs.sendAction(SongsViewModel.Action.GetList)
+        val albumId = "4aawyAB9vmqN3uQ7FjRGTy"
+        viewModelSongs.sendAction(SongsViewModel.Action.GetList(albumId))
     }
 
-    private fun showMiniBar(songId: String) {
+    /*private fun showMiniBar(songId: String) {
         viewModelSongs.state
             .map { it.data }
             .distinctUntilChanged()
@@ -70,7 +75,7 @@ class SongsFragment : BaseMVVMFragment<SongsViewModel>() {
                     .replace(R.id.miniBar, miniBarFragment)
                     .commit()
             }.launchIn(lifecycleScope)
-    }
+    }*/
 
     private fun setupPopup(
         position: Int,
@@ -89,7 +94,7 @@ class SongsFragment : BaseMVVMFragment<SongsViewModel>() {
         val dropdownBinding =
             LayoutPopupBinding.bind(viewPopup)
 
-        viewModelSongs.state
+        /*viewModelSongs.state
             .map { it.data }
             .distinctUntilChanged()
             .onEach { listSongs ->
@@ -103,7 +108,7 @@ class SongsFragment : BaseMVVMFragment<SongsViewModel>() {
                     } else {
                         dropdownBinding.play.setImageResource(R.drawable.ic_pause)
                     }
-                    viewModelSongs.sendAction(SongsViewModel.Action.UpdateIconPlayPause(listSongs[position]))
+//                    viewModelSongs.sendAction(SongsViewModel.Action.UpdateIconPlayPause(listSongs[position]))
                 }
                 dropdownBinding.favourite.setOnClickListener {
                     if (listSongs[position].isFavourite) {
@@ -111,7 +116,7 @@ class SongsFragment : BaseMVVMFragment<SongsViewModel>() {
                     } else {
                         dropdownBinding.favourite.setImageResource(R.drawable.ic_heart_full)
                     }
-                    viewModelSongs.sendAction(SongsViewModel.Action.UpdateIconHeart(listSongs[position]))
+//                    viewModelSongs.sendAction(SongsViewModel.Action.UpdateIconHeart(listSongs[position]))
                 }
             }.launchIn(lifecycleScope)
 
@@ -121,7 +126,7 @@ class SongsFragment : BaseMVVMFragment<SongsViewModel>() {
                 parentFragmentManager,
                 DialogAddPlaylistFragment::class.simpleName,
             )
-        }
+        }*/
     }
 
     override fun observerState() {

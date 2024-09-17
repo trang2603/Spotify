@@ -1,7 +1,7 @@
 package com.demo.screen.albums.adapter
 
 import androidx.recyclerview.widget.RecyclerView
-import com.demo.data.model.Albums
+import com.demo.data.model.Album
 import com.demo.databinding.ItemAlbumBinding
 
 class AlbumsViewHolder(
@@ -17,8 +17,8 @@ class AlbumsViewHolder(
         }
     }
 
-    fun bind(albums: Albums) {
-        binding.tvAlbumName.text = albums.albumName
-        binding.tvYear.text = albums.year
+    fun bind(albums: Album) {
+        binding.tvAlbumName.text = albums.name
+        binding.tvYear.text = albums.release_date
     }
 }
