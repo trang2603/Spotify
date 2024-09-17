@@ -1,6 +1,9 @@
 package com.demo.data.repository.datasource
 
+import com.demo.data.model.Playlist
+import com.demo.data.model.Playlists
 import com.demo.data.repository.AccessArtists
+import com.demo.data.repository.AccessPlaylist
 import com.demo.data.repository.AccessTokenResponse
 import retrofit2.Call
 import retrofit2.http.Field
@@ -26,4 +29,10 @@ interface ApiService {
         @Header("Authorization") accessToken: String,
         @Query("ids") ids: String,
     ): Call<AccessArtists>
+
+    @GET("playlists/{playlist_id}")
+    fun getPlaylist(
+        @Header("Authorization") accessToken: String,
+        @Query("playlist_id") id: String,
+    ): Call<AccessPlaylist>
 }
