@@ -45,12 +45,18 @@ class AlbumRepository(
     override fun getAlbumTracks(
         accessToken: String,
         id: String,
+        market: String,
+        limit: Int,
+        offset: Int,
         onSuccess: (List<Track>) -> Unit,
     ) {
         val albumCall =
             retrofitClient.instance.getAlbumTracks(
                 accessToken = "Bearer $accessToken",
                 id = id,
+                market = market,
+                limit = limit,
+                offset = offset
             )
         albumCall.enqueue(
             object : Callback<AccessTracks> {

@@ -14,6 +14,9 @@ interface IAlbum {
     fun getAlbumTracks(
         accessToken: String,
         id: String,
+        market: String,
+        limit: Int,
+        offset: Int,
         onSuccess: (List<Track>) -> Unit,
     )
 }

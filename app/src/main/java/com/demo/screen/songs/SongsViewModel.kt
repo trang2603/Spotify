@@ -67,6 +67,9 @@ class SongsViewModel(
         albumRepository.getAlbumTracks(
             accessToken = accessToken,
             id = albumId,
+            market = "ES",
+            limit = 20,
+            offset = 5,
             onSuccess = { tracks ->
                 sendMutation(Mutation.GetList(tracks))
 //                fetchSongsWithArtist(accessToken, artistId, songList)

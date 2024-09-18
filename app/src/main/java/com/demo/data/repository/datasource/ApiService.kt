@@ -55,6 +55,9 @@ interface ApiService {
     fun getAlbumTracks(
         @Header("Authorization") accessToken: String,
         @Path("id") id: String,
+        @Query("market") market: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): Call<AccessTracks>
 
     @GET("artists/{id}/albums")
